@@ -4,7 +4,7 @@ Repositório de automação e código-fonte para implantação de um servidor de
 
 ---
 
-## 📋 Arquitetura e Requisitos Atendidos
+## Arquitetura e Requisitos Atendidos
 
 | Componente | Tecnologia | Porta / Endereço | Função |
 | :--- | :--- | :--- | :--- |
@@ -16,7 +16,7 @@ Repositório de automação e código-fonte para implantação de um servidor de
 
 ---
 
-## 📂 Estrutura do Repositório
+## Estrutura do Repositório
 
 ```text
 servidor-linux-redes/
@@ -30,3 +30,43 @@ servidor-linux-redes/
 │   └── init.sql              # Criação de bancos, usuários, permissões e tabela de teste
 ├── app-java/                 # Código-fonte da aplicação Java Web (JSP/Servlet + JDBC)
 └── configs/                  # Arquivos de configuração auxiliares (VirtualHosts, etc.)
+```
+
+## Guia para os Integrantes: Como Configurar o Ambiente
+1. Clonar o Repositório
+Abra o terminal (Ubuntu/WSL ou Linux) e clone o projeto:
+
+```text
+# Via SSH (recomendado se já configurou sua chave no GitHub)
+git clone git@github.com:LariBits/servidor-linux-redes.git
+
+# Ou via HTTPS
+git clone [https://github.com/LariBits/servidor-linux-redes.git](https://github.com/LariBits/servidor-linux-redes.git)\
+
+cd servidor-linux-redes
+```
+
+2. Configurar sua Identidade no Git (se for a primeira vez na máquina)
+Bash
+
+```text
+git config --global user.name "Seu Nome"
+git config --global user.email "seu-email-do-github@exemplo.com"
+```
+
+3. Fluxo de Trabalho (Branches e Commits)
+Nunca faça alterações diretamente na branch main. Siga sempre esta ordem antes de programar:
+
+```text
+# 1. Atualize sua branch main local
+git checkout main
+git pull origin main
+
+# 2. Crie uma branch para a sua tarefa
+git checkout -b feat/sua-tarefa
+
+# 3. Após editar seus arquivos, salve e envie para o GitHub
+git add .
+git commit -m "feat: descrição clara do que foi feito"
+git push -u origin feat/sua-tarefa
+```
