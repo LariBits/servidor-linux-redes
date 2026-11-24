@@ -70,3 +70,30 @@ git add .
 git commit -m "feat: descrição clara do que foi feito"
 git push -u origin feat/sua-tarefa
 ```
+
+# Como Executar o Provisionamento no Servidor
+Na Máquina Virtual limpa configurada com placa de rede em Modo Bridge:
+
+Instale o Git e clone o projeto:
+```text
+sudo apt update && sudo apt install git -y
+git clone [https://github.com/LariBits/servidor-linux-redes.git](https://github.com/LariBits/servidor-linux-redes.git)
+cd servidor-linux-redes
+```
+Garanta permissão de execução e rode os scripts na ordem:
+```text
+chmod +x scripts/*.sh
+sudo bash scripts/01-rede-firewall.sh
+sudo bash scripts/02-setup-mariadb.sh
+sudo mysql < database/init.sql
+sudo bash scripts/03-setup-apache.sh
+sudo bash scripts/04-setup-tomcat.sh
+
+```
+## Checklist de Validação em Rede:
+
+* Descobrir IP da VM: ip a
+* Testar WordPress a partir de outro PC da sala: http://<IP_DO_SERVIDOR>/wordpress
+* Testar Aplicação Java a partir de outro PC da sala: http://<IP_DO_SERVIDOR>:8080/app_java
+* Testar persistência após reinicialização (sudo reboot): sudo systemctl status apache2 mariadb tomcat10
+EOF
