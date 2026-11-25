@@ -2,6 +2,9 @@
 
 Repositório de automação e código-fonte para implantação de um servidor de rede completo em **Ubuntu Server 24.04 LTS**, desenvolvido para a disciplina de Redes/Administração de Servidores no **IFSP – Câmpus São João da Boa Vista**.
 
+**Integrantes:** <Larissa Silva>; <Leticia Teles>; <João Gregorio>; <Rebeca Laia>
+**Disciplina / Professor:** Redes de Computadores – <Prof. Roan>
+
 ---
 
 ## Arquitetura e Requisitos Atendidos
@@ -33,7 +36,7 @@ servidor-linux-redes/
     └── 01-ip-fixo.yaml.exemplo  # Modelo Netplan para fixar o IP do servidor
 ```
 
-## Guia para os Integrantes: Como Configurar o Ambiente
+## Guia para os Usuários: Como Configurar o Ambiente
 1. Clonar o Repositório
 Abra o terminal (Ubuntu/WSL ou Linux) e clone o projeto:
 
