@@ -29,27 +29,27 @@ servidor-linux-redes/
 ├── database/
 │   └── init.sql              # Criação de bancos, usuários, permissões e tabela de teste
 ├── app-java/                 # Código-fonte da aplicação Java Web (JSP/Servlet + JDBC)
-└── configs/                  # Arquivos de configuração auxiliares (VirtualHosts, etc.)
+└── configs/                  # Arquivos de configuração auxiliares
+    └── 01-ip-fixo.yaml.exemplo  # Modelo Netplan para fixar o IP do servidor
 ```
 
 ## Guia para os Integrantes: Como Configurar o Ambiente
 1. Clonar o Repositório
 Abra o terminal (Ubuntu/WSL ou Linux) e clone o projeto:
 
-```text
+```bash
 # Via SSH (recomendado se já configurou sua chave no GitHub)
 git clone git@github.com:LariBits/servidor-linux-redes.git
 
 # Ou via HTTPS
-git clone [https://github.com/LariBits/servidor-linux-redes.git](https://github.com/LariBits/servidor-linux-redes.git)\
+git clone https://github.com/LariBits/servidor-linux-redes.git
 
 cd servidor-linux-redes
 ```
 
 2. Configurar sua Identidade no Git (se for a primeira vez na máquina)
-Bash
 
-```text
+```bash
 git config --global user.name "Seu Nome"
 git config --global user.email "seu-email-do-github@exemplo.com"
 ```
@@ -57,7 +57,7 @@ git config --global user.email "seu-email-do-github@exemplo.com"
 3. Fluxo de Trabalho (Branches e Commits)
 Nunca faça alterações diretamente na branch main. Siga sempre esta ordem antes de programar:
 
-```text
+```bash
 # 1. Atualize sua branch main local
 git checkout main
 git pull origin main
@@ -75,25 +75,44 @@ git push -u origin feat/sua-tarefa
 Na Máquina Virtual limpa configurada com placa de rede em Modo Bridge:
 
 Instale o Git e clone o projeto:
-```text
+```bash
 sudo apt update && sudo apt install git -y
-git clone [https://github.com/LariBits/servidor-linux-redes.git](https://github.com/LariBits/servidor-linux-redes.git)
+git clone https://github.com/LariBits/servidor-linux-redes.git
 cd servidor-linux-redes
 ```
+
+**(Recomendado) Fixar o IP do servidor**
+
+Para que o endereço não mude entre reinicializações, configure um IP fixo usando o modelo [configs/01-ip-fixo.yaml.exemplo](configs/01-ip-fixo.yaml.exemplo). As instruções estão nos comentários do próprio arquivo (combine o IP com o professor/TI antes, para evitar conflito).
+
 Garanta permissão de execução e rode os scripts na ordem:
-```text
+```bash
 chmod +x scripts/*.sh
 sudo bash scripts/01-rede-firewall.sh
-sudo bash scripts/02-setup-mariadb.sh
-sudo mysql < database/init.sql
+sudo bash scripts/02-setup-mariadb.sh   # já executa o database/init.sql
 sudo bash scripts/03-setup-apache.sh
 sudo bash scripts/04-setup-tomcat.sh
-
 ```
-## Checklist de Validação em Rede:
 
-* Descobrir IP da VM: ip a
-* Testar WordPress a partir de outro PC da sala: http://<IP_DO_SERVIDOR>/wordpress
-* Testar Aplicação Java a partir de outro PC da sala: http://<IP_DO_SERVIDOR>:8080/app_java
-* Testar persistência após reinicialização (sudo reboot): sudo systemctl status apache2 mariadb tomcat10
-EOF
+**Concluir a instalação do WordPress**
+
+Abra no navegador `http://<IP>/wordpress/wp-admin/install.php` e preencha o título do site, usuário administrador e senha.
+
+## Checklist de Validação em Rede
+
+> Todos os testes de acesso devem ser feitos a partir de **OUTRO PC da sala**, não da própria VM — é isso que comprova que o servidor está acessível na rede.
+
+- [ ] Descobrir o IP da VM: `ip a`
+- [ ] Testar SSH a partir de outro PC da sala: `ssh <usuario>@<IP_DO_SERVIDOR>`
+- [ ] Testar WordPress a partir de outro PC da sala: `http://<IP_DO_SERVIDOR>/wordpress`
+- [ ] Testar Aplicação Java a partir de outro PC da sala: `http://<IP_DO_SERVIDOR>:8080/app_java`
+- [ ] Testar persistência após reinicialização (`sudo reboot`): `sudo systemctl status apache2 mariadb tomcat10`
+
+## Solução de Problemas
+
+| Sintoma | O que verificar |
+| :--- | :--- |
+| Não abre de outro PC | `sudo ufw status` (portas 22, 80 e 8080 liberadas) e se a placa de rede da VM está em **Modo Bridge** |
+| WordPress mostra "Erro ao estabelecer conexão com o banco de dados" | `sudo systemctl status mariadb` e os valores de `DB_NAME`, `DB_USER` e `DB_PASSWORD` em `/var/www/html/wordpress/wp-config.php` |
+| `/app_java` retorna 404 | `ls /var/lib/tomcat10/webapps` (o `app_java` precisa estar lá) e `sudo journalctl -u tomcat10` |
+| Página Java mostra erro de banco | `sudo mysql -e "SELECT * FROM app_java.relatorios_sistema;"` para confirmar que a tabela existe e tem dados |

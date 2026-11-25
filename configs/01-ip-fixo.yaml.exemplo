@@ -1,0 +1,32 @@
+# Modelo Netplan para IP fixo - Ubuntu Server 24.04 LTS
+#
+# Como usar:
+#   1. Descubra o nome da interface e a rede atual:
+#        ip a          -> nome da interface (ex.: enp0s3) e IP/máscara atuais
+#        ip route      -> gateway padrão (linha "default via ...")
+#   2. Combine o IP fixo com o professor/TI da sala para evitar conflito de IP.
+#   3. Substitua <INTERFACE>, <IP_FIXO> e <GATEWAY> abaixo.
+#   4. Copie para o Netplan e restrinja as permissões:
+#        sudo cp configs/01-ip-fixo.yaml.exemplo /etc/netplan/01-ip-fixo.yaml
+#        sudo chmod 600 /etc/netplan/01-ip-fixo.yaml
+#   5. Mova a configuração padrão (DHCP) para backup:
+#        sudo mv /etc/netplan/50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml.bak
+#   6. Teste (reverte sozinho em 120s se perder a conexão) e depois aplique:
+#        sudo netplan try
+#        sudo netplan apply
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    <INTERFACE>:
+      dhcp4: false
+      addresses:
+        - <IP_FIXO>/24
+      routes:
+        - to: default
+          via: <GATEWAY>
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 1.1.1.1

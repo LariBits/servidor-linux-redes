@@ -35,7 +35,7 @@
             Class.forName("org.mariadb.jdbc.Driver");
             conn = DriverManager.getConnection(url, user, pass);
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT id, modulo, status_servico, observacao, data_verificacao FROM relatorios_sistema");
+            rs = stmt.executeQuery("SELECT id, modulo, status_servico, observacao, data_verificacao FROM relatorios_sistema ORDER BY id");
     %>
             <table>
                 <thead>

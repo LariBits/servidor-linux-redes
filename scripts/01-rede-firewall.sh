@@ -1,4 +1,3 @@
-cat << 'EOF' > scripts/01-rede-firewall.sh
 #!/bin/bash
 
 set -e
@@ -35,6 +34,3 @@ echo ""
 echo "-> Endereço(s) IP deste servidor na rede:"
 hostname -I
 echo "==================================================="
-EOF
-
-chmod +x scripts/01-rede-firewall.sh
